@@ -104,19 +104,12 @@ Page({
   renderUI() {
     const M = px(30)
 
-    // TEMPORAER: Drei Fixes in Folge haben laut Jan nichts veraendert -
-    // statt weiter zu raten, hier eine hart berechnete Referenzlinie bei
-    // x=W/2 (216 bei W=432) ueber die volle Bildschirmhoehe. Wenn Text/
-    // Button auf dem naechsten Foto genau auf dieser Linie sitzen,
-    // liegt's nicht am Code, sondern z.B. an einem alten/gecachten
-    // Install. Vor dem naechsten echten Fix wieder entfernen.
-    hmUI.createWidget(hmUI.widget.FILL_RECT, {
-      x: Math.round(W / 2) - 1,
-      y: 0,
-      w: 2,
-      h: H,
-      color: 0xff0000,
-    })
+    // Debug-Referenzlinie (Commit e26b60a) hat gezeigt: der Inhalt SITZT
+    // korrekt bei x=W/2, "SMART POMODORO"/Zeit/Button liegen alle exakt
+    // auf der Linie. Der wahrgenommene Versatz kam vom Vergleich mit der
+    // Statusleiste ("Bio Pomodoro   17:44") - die ist absichtlich
+    // asymmetrisch (App-Name links, Uhrzeit rechts, System-UI), keine
+    // zentrierte Referenz. Kein Layout-Bug, Linie wieder entfernt.
 
     // Jan: Ausrichtung sollte mittiger sein (Block hing eher oben, viel
     // Leerraum unten) und die beiden Zeilen unter der Zeit waren zu klein.
