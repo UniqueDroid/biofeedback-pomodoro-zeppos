@@ -7,7 +7,6 @@ import {
   VIBRATOR_SCENE_STRONG_REMINDER,
 } from '@zos/sensor'
 import { setPageBrightTime } from '@zos/display'
-import { px } from '@zos/utils'
 
 // Boilerplate-Korrekturen gegen die echte Zepp OS API (node_modules/
 // @zeppos/device-types), analog zu bike-hud-zeppos:
@@ -20,14 +19,13 @@ import { px } from '@zos/utils'
 // - setPageBrightScreen existiert nicht, real: setPageBrightTime
 //   (Millisekunden statt Sekunden).
 // - Vibrator.setMode(1) nahm eine rohe Zahl an - die echte API braucht
-//   entweder start({mode: KONSTANTE}) oder setMode({mode: KONSTANTE}).
-//   Einheitlich auf start({mode}) umgestellt, mit den echten
-//   VIBRATOR_SCENE_*-Konstanten statt geratener Zahlen.
-// - getDeviceInfo().width/height NICHT fuer Layout-Koordinaten nutzen -
-//   lieferte auf diesem Geraet 480 statt der echten physischen 432
-//   (siehe Kommentar in build() unten, gemessen anhand Jans Foto vom
-//   nach rechts verschobenen Button). App zielt eh nur auf PikeW,
-//   also feste, aus devices.json bekannte Aufloesung verwenden.
+//   start({mode: KONSTANTE}) mit den echten VIBRATOR_SCENE_*-Konstanten.
+//
+// Layout komplett neu (Jans Anweisung nach mehreren erfolglosen
+// Zentrierungs-Fixes): KEIN px() mehr irgendwo, nur noch reine
+// Pixel-Literale und die feste PikeW-Aufloesung (432x514) - exakt
+// Nukis/SmartLocks Muster, das auf diesem Geraet nachweislich
+// zuverlaessig zentriert.
 
 const W = 432
 const H = 514
@@ -76,14 +74,6 @@ Page({
   },
 
   build() {
-    // Gemessene Ursache fuer den nach rechts verschobenen Button (Jans
-    // Foto: Pille-Mitte bei x=236 statt 216 auf einem 432px-Screenshot,
-    // exakt der halbe Unterschied zwischen 480 und 432): getDeviceInfo()
-    // liefert hier offenbar 480 als "width" statt der echten 432 - eine
-    // Art virtuelle/Referenz-Breite, nicht die physische Pixelbreite, in
-    // der Widgets tatsaechlich positioniert werden. Deshalb NICHT mehr
-    // fuer Layout-Berechnungen verwenden - App zielt eh nur auf PikeW,
-    // also direkt die aus devices.json bekannte echte Aufloesung nehmen.
     this.renderUI()
 
     try {
@@ -102,36 +92,15 @@ Page({
   },
 
   renderUI() {
-    const M = px(30)
+    const M = 30
 
-    // Vorherige Referenzlinie war selbstbezueglich (x=W/2 mit demselben
-    // W wie der Rest des Inhalts) - haette einen Fehler in W selbst gar
-    // nicht aufgedeckt, nur ob Inhalt konsistent ZU SICH SELBST ist.
-    // Jan bestaetigt: mit blossem Auge auf der Uhr sieht's schief aus,
-    // nicht nur auf Fotos - also doch ein echter Bug. Jetzt ein
-    // unabhaengiger Test: ein voller Balken von x=0 bis x=W in einer
-    // Signalfarbe. Wenn W stimmt, beruehrt er beide Bildschirmraender
-    // exakt - jede Luecke oder jedes Ueberstehen zeigt sofort, ob W
-    // (432) tatsaechlich der nutzbaren Zeichenflaeche entspricht.
-    hmUI.createWidget(hmUI.widget.FILL_RECT, {
-      x: 0,
-      y: px(15),
-      w: W,
-      h: px(10),
-      color: 0xff0000,
-    })
-
-    // Jan: Ausrichtung sollte mittiger sein (Block hing eher oben, viel
-    // Leerraum unten) und die beiden Zeilen unter der Zeit waren zu klein.
-    // Ganzer Block 35px tiefer (zentriert den ~344px hohen Inhalt auf
-    // dem 514px hohen Screen), vitalWidget/statusWidget vergroessert.
     this.state.titleWidget = hmUI.createWidget(hmUI.widget.TEXT, {
       x: 0,
-      y: px(85),
+      y: 85,
       w: W,
-      h: px(32),
+      h: 32,
       color: COLOR.dim,
-      text_size: px(22),
+      text_size: 22,
       align_h: hmUI.align.CENTER_H,
       align_v: hmUI.align.CENTER_V,
       text: 'SMART POMODORO',
@@ -139,12 +108,12 @@ Page({
 
     this.state.timeWidget = hmUI.createWidget(hmUI.widget.TEXT, {
       x: 0,
-      y: px(131),
+      y: 131,
       w: W,
-      h: px(110),
+      h: 110,
       color: COLOR.green,
-      text_size: px(90),
-      char_space: px(2),
+      text_size: 90,
+      char_space: 2,
       align_h: hmUI.align.CENTER_H,
       align_v: hmUI.align.CENTER_V,
       text: '25:00',
@@ -152,35 +121,27 @@ Page({
 
     this.state.vitalWidget = hmUI.createWidget(hmUI.widget.TEXT, {
       x: 0,
-      y: px(251),
+      y: 251,
       w: W,
-      h: px(38),
+      h: 38,
       color: COLOR.cyan,
-      text_size: px(28),
+      text_size: 28,
       align_h: hmUI.align.CENTER_H,
       text: 'HR: -- bpm | Stress: --',
     })
 
     this.state.statusWidget = hmUI.createWidget(hmUI.widget.TEXT, {
       x: M,
-      y: px(295),
+      y: 295,
       w: W - M * 2,
-      h: px(60),
+      h: 60,
       color: COLOR.statusDefault,
-      text_size: px(24),
+      text_size: 24,
       align_h: hmUI.align.CENTER_H,
       text_style: hmUI.text_style.WRAP,
       text: 'Bereit für 25 Min Fokus',
     })
 
-    // Weder Emoji-Entfernung noch das feste W=432 haben die Verschiebung
-    // behoben (Jan: "hat sich nichts geändert") - beides war die falsche
-    // Spur. Nuki/SmartLock hat exakt dieselbe Zentrierungsformel
-    // (x: (DEVICE_WIDTH - 300) / 2) und funktioniert dort nachweislich,
-    // ABER OHNE jedes px() auf dem Button (reine Pixel-Literale fuer
-    // x/y/w/h/radius/text_size). Hier war stattdessen px() im Spiel
-    // (btnW = px(300) etc.) - jetzt exakt Nukis Muster uebernommen,
-    // keine px()-Aufrufe mehr auf diesem Widget.
     const btnW = 300
     this.state.btnControl = hmUI.createWidget(hmUI.widget.BUTTON, {
       x: (W - btnW) / 2,
@@ -357,9 +318,6 @@ Page({
 
     this.state.mode = STATES.IDLE
     this.state.remainingSeconds = FOCUS_SEC
-    // War bisher stehen geblieben - Sensoren sind hier schon gestoppt,
-    // aber der letzte Messwert klebte weiter im UI (Jans Screenshot: "HR:
-    // 82 bpm" im Ruhezustand, obwohl noch nie eine Session lief).
     this.state.currentHr = 0
     this.state.currentStress = 0
     this.state.titleWidget.setProperty(hmUI.prop.TEXT, 'SMART POMODORO')
