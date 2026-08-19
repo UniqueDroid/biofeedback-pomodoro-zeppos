@@ -2,10 +2,6 @@ import { getDeviceInfo } from '@zos/device'
 import { px } from '@zos/utils'
 import ui from '@zos/ui'
 
-// Komplett neue Architektur (Jans Anweisung: von Grund auf neu, anderes
-// Geruest) - @zeppos/zml BasePage + separate layout/style-Dateien, exakt
-// wie in den offiziellen Zepp-Beispielen (@zeppos/zml/examples), statt
-// des bisherigen rohen Page()/hmUI.createWidget()-Ansatzes.
 export const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = getDeviceInfo()
 
 export const COLOR = {
