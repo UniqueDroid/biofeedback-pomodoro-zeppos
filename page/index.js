@@ -105,11 +105,13 @@ Page({
   renderUI() {
     const M = px(30)
 
-    // Statusbalken (App-Name+Uhrzeit) frisst oben ~50-70px auf diesem
-    // Geraet (siehe bike-hud-zeppos-Lehre) - Titel entsprechend tiefer.
+    // Jan: Ausrichtung sollte mittiger sein (Block hing eher oben, viel
+    // Leerraum unten) und die beiden Zeilen unter der Zeit waren zu klein.
+    // Ganzer Block 35px tiefer (zentriert den ~344px hohen Inhalt auf
+    // dem 514px hohen Screen), vitalWidget/statusWidget vergroessert.
     this.state.titleWidget = hmUI.createWidget(hmUI.widget.TEXT, {
       x: 0,
-      y: px(50),
+      y: px(85),
       w: W,
       h: px(32),
       color: COLOR.dim,
@@ -121,7 +123,7 @@ Page({
 
     this.state.timeWidget = hmUI.createWidget(hmUI.widget.TEXT, {
       x: 0,
-      y: px(96),
+      y: px(131),
       w: W,
       h: px(110),
       color: COLOR.green,
@@ -134,22 +136,22 @@ Page({
 
     this.state.vitalWidget = hmUI.createWidget(hmUI.widget.TEXT, {
       x: 0,
-      y: px(216),
+      y: px(251),
       w: W,
-      h: px(32),
+      h: px(38),
       color: COLOR.cyan,
-      text_size: px(22),
+      text_size: px(28),
       align_h: hmUI.align.CENTER_H,
       text: 'HR: -- bpm | Stress: --',
     })
 
     this.state.statusWidget = hmUI.createWidget(hmUI.widget.TEXT, {
       x: M,
-      y: px(256),
+      y: px(295),
       w: W - M * 2,
-      h: px(56),
+      h: px(60),
       color: COLOR.statusDefault,
-      text_size: px(18),
+      text_size: px(24),
       align_h: hmUI.align.CENTER_H,
       text_style: hmUI.text_style.WRAP,
       text: 'Bereit für 25 Min Fokus',
@@ -158,7 +160,7 @@ Page({
     const btnW = px(300)
     this.state.btnControl = hmUI.createWidget(hmUI.widget.BUTTON, {
       x: (W - btnW) / 2,
-      y: px(330),
+      y: px(370),
       w: btnW,
       h: px(64),
       radius: px(32),
@@ -331,8 +333,14 @@ Page({
 
     this.state.mode = STATES.IDLE
     this.state.remainingSeconds = FOCUS_SEC
+    // War bisher stehen geblieben - Sensoren sind hier schon gestoppt,
+    // aber der letzte Messwert klebte weiter im UI (Jans Screenshot: "HR:
+    // 82 bpm" im Ruhezustand, obwohl noch nie eine Session lief).
+    this.state.currentHr = 0
+    this.state.currentStress = 0
     this.state.titleWidget.setProperty(hmUI.prop.TEXT, 'SMART POMODORO')
     this.state.timeWidget.setProperty(hmUI.prop.MORE, { text: '25:00', color: COLOR.green })
+    this.state.vitalWidget.setProperty(hmUI.prop.TEXT, 'HR: -- bpm | Stress: --')
     this.state.statusWidget.setProperty(hmUI.prop.MORE, {
       text: 'Bereit für 25 Min Fokus',
       color: COLOR.statusDefault,
