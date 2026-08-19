@@ -22,12 +22,7 @@ import { px } from '@zos/utils'
 //   (Millisekunden statt Sekunden).
 // - Vibrator.setMode(1) nahm eine rohe Zahl an - die echte API braucht
 //   start({mode: KONSTANTE}) mit den echten VIBRATOR_SCENE_*-Konstanten.
-//
-// Layout komplett neu (Jans Anweisung nach mehreren erfolglosen
-// Zentrierungs-Fixes): KEIN px() mehr irgendwo, nur noch reine
-// Pixel-Literale und die feste PikeW-Aufloesung (432x514) - exakt
-// Nukis/SmartLocks Muster, das auf diesem Geraet nachweislich
-// zuverlaessig zentriert.
+
 const FALLBACK_W = 432
 const FALLBACK_H = 514
 let W = FALLBACK_W
