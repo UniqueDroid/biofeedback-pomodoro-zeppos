@@ -156,24 +156,26 @@ Page({
       text: 'Bereit für 25 Min Fokus',
     })
 
-    // Emoji-Praefixe (▶/⏹) vor den Button-/Titel-Texten entfernt: Jans
-    // Foto zeigte den Button-Text sichtbar nach rechts verschoben statt
-    // mittig in der Pille - vermutlich eine falsche Breitenberechnung
-    // fuer das Emoji-Glyph, die die Zentrierung verschiebt. Nuki/
-    // SmartLock nutzt seit jeher reinen Text ohne Icon-Praefix und
-    // zentriert dort zuverlaessig.
-    const btnW = px(300)
+    // Weder Emoji-Entfernung noch das feste W=432 haben die Verschiebung
+    // behoben (Jan: "hat sich nichts geändert") - beides war die falsche
+    // Spur. Nuki/SmartLock hat exakt dieselbe Zentrierungsformel
+    // (x: (DEVICE_WIDTH - 300) / 2) und funktioniert dort nachweislich,
+    // ABER OHNE jedes px() auf dem Button (reine Pixel-Literale fuer
+    // x/y/w/h/radius/text_size). Hier war stattdessen px() im Spiel
+    // (btnW = px(300) etc.) - jetzt exakt Nukis Muster uebernommen,
+    // keine px()-Aufrufe mehr auf diesem Widget.
+    const btnW = 300
     this.state.btnControl = hmUI.createWidget(hmUI.widget.BUTTON, {
       x: (W - btnW) / 2,
-      y: px(370),
+      y: 370,
       w: btnW,
-      h: px(64),
-      radius: px(32),
+      h: 64,
+      radius: 32,
       normal_color: COLOR.btnIdle,
       press_color: COLOR.btnPress,
       text: 'Fokus Starten',
       color: 0xffffff,
-      text_size: px(24),
+      text_size: 28,
       click_func: () => this.handleControlClick(),
     })
   },
