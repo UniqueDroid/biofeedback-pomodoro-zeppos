@@ -19,7 +19,7 @@
   "targets": {
     "PikeW": {
       "module": {
-        "page": { "pages": ["page/index"] }
+        "page": { "pages": ["page/index.page"] }
       },
       "platforms": [{ "name": "PikeW", "deviceSource": 11206915 }]
     }

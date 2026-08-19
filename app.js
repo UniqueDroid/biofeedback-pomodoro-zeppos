@@ -1,15 +1,13 @@
-import { log as Logger } from '@zos/utils'
+import { BaseApp } from '@zeppos/zml/base-app'
 
-const logger = Logger.getLogger('biopomodoro')
-
-App({
-  globalData: {},
-
-  onCreate() {
-    logger.debug('app onCreate')
-  },
-
-  onDestroy() {
-    logger.debug('app onDestroy')
-  },
-})
+App(
+  BaseApp({
+    globalData: {},
+    onCreate() {
+      this.log('app onCreate')
+    },
+    onDestroy() {
+      this.log('app onDestroy')
+    },
+  }),
+)
