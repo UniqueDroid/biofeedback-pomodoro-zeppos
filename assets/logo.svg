@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 248 248" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141414" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+  </defs>
+
+  <!-- In-App-Icon: 248x248, r=120, 4px transparenter Rand -->
+  <circle cx="124" cy="124" r="120" fill="url(#bgGrad)" />
+
+  <!-- Timer-Ring (Amber, 75% offen wie ein Countdown) -->
+  <circle cx="124" cy="124" r="78" fill="none" stroke="#ffb300" stroke-width="10"
+          stroke-linecap="round" stroke-dasharray="367 490" transform="rotate(-90 124 124)" opacity="0.55" />
+
+  <!-- Herzschlag-Linie darueber (Gruen/Cyan) -->
+  <path d="M 58 124 L 90 124 L 104 90 L 124 158 L 140 124 L 190 124"
+        fill="none" stroke="#00ff66" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
