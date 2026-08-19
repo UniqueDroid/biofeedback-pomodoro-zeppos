@@ -104,12 +104,22 @@ Page({
   renderUI() {
     const M = px(30)
 
-    // Debug-Referenzlinie (Commit e26b60a) hat gezeigt: der Inhalt SITZT
-    // korrekt bei x=W/2, "SMART POMODORO"/Zeit/Button liegen alle exakt
-    // auf der Linie. Der wahrgenommene Versatz kam vom Vergleich mit der
-    // Statusleiste ("Bio Pomodoro   17:44") - die ist absichtlich
-    // asymmetrisch (App-Name links, Uhrzeit rechts, System-UI), keine
-    // zentrierte Referenz. Kein Layout-Bug, Linie wieder entfernt.
+    // Vorherige Referenzlinie war selbstbezueglich (x=W/2 mit demselben
+    // W wie der Rest des Inhalts) - haette einen Fehler in W selbst gar
+    // nicht aufgedeckt, nur ob Inhalt konsistent ZU SICH SELBST ist.
+    // Jan bestaetigt: mit blossem Auge auf der Uhr sieht's schief aus,
+    // nicht nur auf Fotos - also doch ein echter Bug. Jetzt ein
+    // unabhaengiger Test: ein voller Balken von x=0 bis x=W in einer
+    // Signalfarbe. Wenn W stimmt, beruehrt er beide Bildschirmraender
+    // exakt - jede Luecke oder jedes Ueberstehen zeigt sofort, ob W
+    // (432) tatsaechlich der nutzbaren Zeichenflaeche entspricht.
+    hmUI.createWidget(hmUI.widget.FILL_RECT, {
+      x: 0,
+      y: px(15),
+      w: W,
+      h: px(10),
+      color: 0xff0000,
+    })
 
     // Jan: Ausrichtung sollte mittiger sein (Block hing eher oben, viel
     // Leerraum unten) und die beiden Zeilen unter der Zeit waren zu klein.
