@@ -157,6 +157,12 @@ Page({
       text: 'Bereit für 25 Min Fokus',
     })
 
+    // Emoji-Praefixe (▶/⏹) vor den Button-/Titel-Texten entfernt: Jans
+    // Foto zeigte den Button-Text sichtbar nach rechts verschoben statt
+    // mittig in der Pille - vermutlich eine falsche Breitenberechnung
+    // fuer das Emoji-Glyph, die die Zentrierung verschiebt. Nuki/
+    // SmartLock nutzt seit jeher reinen Text ohne Icon-Praefix und
+    // zentriert dort zuverlaessig.
     const btnW = px(300)
     this.state.btnControl = hmUI.createWidget(hmUI.widget.BUTTON, {
       x: (W - btnW) / 2,
@@ -166,7 +172,7 @@ Page({
       radius: px(32),
       normal_color: COLOR.btnIdle,
       press_color: COLOR.btnPress,
-      text: '▶ Fokus Starten',
+      text: 'Fokus Starten',
       color: 0xffffff,
       text_size: px(24),
       click_func: () => this.handleControlClick(),
@@ -191,7 +197,7 @@ Page({
     this.state.titleWidget.setProperty(hmUI.prop.TEXT, 'FOKUS PHASE')
     this.state.timeWidget.setProperty(hmUI.prop.COLOR, COLOR.green)
     this.state.btnControl.setProperty(hmUI.prop.MORE, {
-      text: '⏹ Abbrechen',
+      text: 'Abbrechen',
       normal_color: COLOR.btnActive,
     })
     this.state.statusWidget.setProperty(hmUI.prop.TEXT, 'Vitals werden überwacht…')
@@ -287,7 +293,7 @@ Page({
       this.state.mode = STATES.BREATHING
       this.state.remainingSeconds = BREATHING_SEC
 
-      this.state.titleWidget.setProperty(hmUI.prop.TEXT, '🧘 BIO-DECOMPRESSION')
+      this.state.titleWidget.setProperty(hmUI.prop.TEXT, 'BIO-DECOMPRESSION')
       this.state.timeWidget.setProperty(hmUI.prop.COLOR, COLOR.cyan)
       this.state.statusWidget.setProperty(hmUI.prop.MORE, {
         text: `Hoher Stress (${Math.round(avgStress)})! 10m Atem-Pause`,
@@ -297,7 +303,7 @@ Page({
       this.state.mode = STATES.BREAK
       this.state.remainingSeconds = BREAK_SEC
 
-      this.state.titleWidget.setProperty(hmUI.prop.TEXT, '☕ REGULÄRE PAUSE')
+      this.state.titleWidget.setProperty(hmUI.prop.TEXT, 'REGULÄRE PAUSE')
       this.state.timeWidget.setProperty(hmUI.prop.COLOR, COLOR.amber)
       this.state.statusWidget.setProperty(hmUI.prop.MORE, {
         text: 'Gute Werte! 5 Min erholen.',
@@ -305,7 +311,7 @@ Page({
       })
     }
 
-    this.state.btnControl.setProperty(hmUI.prop.TEXT, '⏹ Pause Beenden')
+    this.state.btnControl.setProperty(hmUI.prop.TEXT, 'Pause Beenden')
     this.updateTimerDisplay()
   },
 
@@ -346,7 +352,7 @@ Page({
       color: COLOR.statusDefault,
     })
     this.state.btnControl.setProperty(hmUI.prop.MORE, {
-      text: '▶ Fokus Starten',
+      text: 'Fokus Starten',
       normal_color: COLOR.btnIdle,
     })
   },
