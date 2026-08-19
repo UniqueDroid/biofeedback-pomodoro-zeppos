@@ -7,7 +7,6 @@ import {
   VIBRATOR_SCENE_STRONG_REMINDER,
 } from '@zos/sensor'
 import { setPageBrightTime } from '@zos/display'
-import { getDeviceInfo } from '@zos/device'
 import { px } from '@zos/utils'
 
 // Boilerplate-Korrekturen gegen die echte Zepp OS API (node_modules/
@@ -24,14 +23,14 @@ import { px } from '@zos/utils'
 //   entweder start({mode: KONSTANTE}) oder setMode({mode: KONSTANTE}).
 //   Einheitlich auf start({mode}) umgestellt, mit den echten
 //   VIBRATOR_SCENE_*-Konstanten statt geratener Zahlen.
-// - getDeviceInfo() auf Modul-Top-Level haette (wie im ersten
-//   bike-hud-Crash) das ganze Modul vor build() zum Absturz gebracht,
-//   falls data:os.device.info fehlt - deshalb hier in build().
+// - getDeviceInfo().width/height NICHT fuer Layout-Koordinaten nutzen -
+//   lieferte auf diesem Geraet 480 statt der echten physischen 432
+//   (siehe Kommentar in build() unten, gemessen anhand Jans Foto vom
+//   nach rechts verschobenen Button). App zielt eh nur auf PikeW,
+//   also feste, aus devices.json bekannte Aufloesung verwenden.
 
-const FALLBACK_W = 432
-const FALLBACK_H = 514
-let W = FALLBACK_W
-let H = FALLBACK_H
+const W = 432
+const H = 514
 
 const COLOR = {
   dim: 0x888888,
@@ -77,14 +76,14 @@ Page({
   },
 
   build() {
-    try {
-      const info = getDeviceInfo()
-      W = info.width
-      H = info.height
-    } catch (e) {
-      // W/H bleiben auf FALLBACK_W/FALLBACK_H
-    }
-
+    // Gemessene Ursache fuer den nach rechts verschobenen Button (Jans
+    // Foto: Pille-Mitte bei x=236 statt 216 auf einem 432px-Screenshot,
+    // exakt der halbe Unterschied zwischen 480 und 432): getDeviceInfo()
+    // liefert hier offenbar 480 als "width" statt der echten 432 - eine
+    // Art virtuelle/Referenz-Breite, nicht die physische Pixelbreite, in
+    // der Widgets tatsaechlich positioniert werden. Deshalb NICHT mehr
+    // fuer Layout-Berechnungen verwenden - App zielt eh nur auf PikeW,
+    // also direkt die aus devices.json bekannte echte Aufloesung nehmen.
     this.renderUI()
 
     try {
