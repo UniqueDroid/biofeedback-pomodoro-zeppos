@@ -7,6 +7,8 @@ import {
   VIBRATOR_SCENE_STRONG_REMINDER,
 } from '@zos/sensor'
 import { setPageBrightTime } from '@zos/display'
+import { getDeviceInfo } from '@zos/device'
+import { px } from '@zos/utils'
 
 // Boilerplate-Korrekturen gegen die echte Zepp OS API (node_modules/
 // @zeppos/device-types), analog zu bike-hud-zeppos:
@@ -26,9 +28,10 @@ import { setPageBrightTime } from '@zos/display'
 // Pixel-Literale und die feste PikeW-Aufloesung (432x514) - exakt
 // Nukis/SmartLocks Muster, das auf diesem Geraet nachweislich
 // zuverlaessig zentriert.
-
-const W = 432
-const H = 514
+const FALLBACK_W = 432
+const FALLBACK_H = 514
+let W = FALLBACK_W
+let H = FALLBACK_H
 
 const COLOR = {
   dim: 0x888888,
