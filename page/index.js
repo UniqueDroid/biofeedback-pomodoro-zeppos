@@ -104,6 +104,20 @@ Page({
   renderUI() {
     const M = px(30)
 
+    // TEMPORAER: Drei Fixes in Folge haben laut Jan nichts veraendert -
+    // statt weiter zu raten, hier eine hart berechnete Referenzlinie bei
+    // x=W/2 (216 bei W=432) ueber die volle Bildschirmhoehe. Wenn Text/
+    // Button auf dem naechsten Foto genau auf dieser Linie sitzen,
+    // liegt's nicht am Code, sondern z.B. an einem alten/gecachten
+    // Install. Vor dem naechsten echten Fix wieder entfernen.
+    hmUI.createWidget(hmUI.widget.FILL_RECT, {
+      x: Math.round(W / 2) - 1,
+      y: 0,
+      w: 2,
+      h: H,
+      color: 0xff0000,
+    })
+
     // Jan: Ausrichtung sollte mittiger sein (Block hing eher oben, viel
     // Leerraum unten) und die beiden Zeilen unter der Zeit waren zu klein.
     // Ganzer Block 35px tiefer (zentriert den ~344px hohen Inhalt auf
